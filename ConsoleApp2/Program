@@ -1,0 +1,75 @@
+using System;
+
+namespace SeidelMethod
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {         
+            Console.Write("Введите количество уравнений: ");
+            int n;
+            while (!int.TryParse(Console.ReadLine(), out n) || n <= 0)
+            {
+                Console.WriteLine("Некорректный ввод. Пожалуйста, введите положительное целое число:");
+            }
+            double[,] A = new double[n, n];
+            double[] B = new double[n];
+            double maxd, eps = 0.01;
+            double[] X, d;
+            X = new double[n];
+            d = new double[n];
+            Console.WriteLine("Введите коэффициенты матрицы A и вектор B");
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write($"A[{i + 1},{j + 1}]: ");
+                    while (!double.TryParse(Console.ReadLine(), out A[i, j]))
+                    {
+                        Console.WriteLine("Некорректный ввод. Пожалуйста, введите число:");
+                    }
+                }
+                Console.Write($"B[{i + 1}]: ");
+                while (!double.TryParse(Console.ReadLine(), out B[i]))
+                {
+                    Console.WriteLine("Некорректный ввод. Пожалуйста, введите число:");
+                }
+            }
+        
+            do
+            {
+                for (int i = 0; i < n; ++i)
+                {
+                    d[i] = X[i];
+                    X[i] = B[i];
+                    for (int j = 0; j < n; ++j)
+                    {
+                        if (i != j)
+                        {
+                            X[i] -= A[i, j] * X[j];
+
+                        }
+                    }
+                    X[i] = X[i] / A[i, i];
+                    d[i] = Math.Abs(d[i] - X[i]);
+                }
+                maxd = d[0];
+                for (int i = 1; i < n; ++i)
+                {
+                   if (d[i] > maxd)
+                   {
+                     maxd = d[i];
+                   }
+
+                }
+
+            } while (maxd > eps);
+            for (int i = 0; i < n; ++i)
+
+            {
+                Console.WriteLine("X[" + i + "] = :F4" + X[i]);
+            }
+            
+        }
+    }
+}
